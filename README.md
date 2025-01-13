@@ -22,5 +22,5 @@ A Single Page Application (SPA) designed to help users discover, save, and explo
 
 ## Contributors:
 
-Lalithya Kalluru-- [Lalithya Kalluru](https://github.com/Lalithya-7602)  
-Kundana Manisri Meda- [Kundana Manisri Meda](https://github.com/Kundana09)
+Lalithya Kalluru - [Lalithya-7602](https://github.com/Lalithya-7602)  
+Kundana Manisri Meda - [Kundana09](https://github.com/Kundana09)
