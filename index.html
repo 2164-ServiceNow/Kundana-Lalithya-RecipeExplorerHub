@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="recipeApp">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recipe Explorer</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container" ng-controller="MainController">
+    <h1>Recipe Explorer</h1>
+    <input
+      type="text"
+      ng-model="ingredient"
+      placeholder="Enter ingredient"
+    />
+    <button ng-click="searchRecipes()">Search Recipes</button>
+
+    <div ng-if="recipes.length > 0">
+      <h2>Recipes:</h2>
+      <ul>
+        <li ng-repeat="recipe in recipes">
+          <h3>{{ recipe.strMeal }}</h3>
+          <h3>{{recipe.strInstructions}}</h3>
+          
+          <img ng-src="{{ recipe.strMealThumb }}" width="150">
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
