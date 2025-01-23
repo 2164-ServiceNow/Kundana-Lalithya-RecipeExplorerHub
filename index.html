@@ -1,35 +1,109 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="recipeApp">
+<html lang="en" ng-app="RecipeBookApp">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Recipe Explorer</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecipeBook</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="app/css/styles.css">
 </head>
-<body>
-  <div class="container" ng-controller="MainController">
-    <h1>Recipe Explorer</h1>
-    <input
-      type="text"
-      ng-model="ingredient"
-      placeholder="Enter ingredient"
-    />
-    <button ng-click="searchRecipes()">Search Recipes</button>
-
-    <div ng-if="recipes.length > 0">
-      <h2>Recipes:</h2>
-      <ul>
-        <li ng-repeat="recipe in recipes">
-          <h3>{{ recipe.strMeal }}</h3>
-          <h3>{{recipe.strInstructions}}</h3>
-          
-          <img ng-src="{{ recipe.strMealThumb }}" width="150">
-        </li>
-      </ul>
+<body ng-controller="RecipeController">
+    <!-- Header Section -->
+    <div class="header">
+        <img src="food.png" alt="Logo" class="rounded-circle">
+        <h1>Recipe Explorer Hub</h1>
     </div>
-  </div>
+    <p class="welcome">Welcome to RecipeBook! Find your favorite recipes and enjoy cooking.</p>
 
-  <script src="app.js"></script>
+    <!-- Search Bar Section -->
+    <div class="search-section">
+        <div class="container">
+            <h2>Search and Filter Recipes</h2>
+            <div class="search-bar-container">
+                <input type="text" class="form-control search-bar" placeholder="Search recipes..." ng-model="searchQuery">
+                <select id="category" class="form-control" ng-model="selectedArea" ng-change="filterRecipes()">
+                    <option value="">Cuisine</option>
+                    <option ng-repeat="area in areas" value="{{area.strArea}}">{{area.strArea}}</option>
+                </select>
+                <button class="btn btn-primary" ng-click="searchRecipes()">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Download Button Section -->
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <button class="btn btn-success" ng-click="downloadEbook()">Download All Recipes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Saved Recipes Section -->
+    <div class="saved-recipes" ng-if="savedRecipes.length > 0">
+        <div class="container">
+            <h2>Your Saved Recipes</h2>
+            <button class="btn btn-danger mb-3" ng-click="clearSavedRecipes()">Clear Saved Recipes</button>
+            <div class="row">
+                <div class="col-md-4" ng-repeat="recipe in savedRecipes">
+                    <div class="recipe-card">
+                        <img ng-src="{{recipe.strMealThumb}}" alt="{{recipe.strMeal}}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{recipe.strMeal}}</h5>
+                            <button class="btn btn-sm btn-primary" ng-click="viewRecipe(recipe.idMeal)">View Recipe</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results" ng-if="recipes.length > 0 && !selectedRecipe">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4" ng-repeat="recipe in recipes">
+                    <div class="recipe-card">
+                        <img ng-src="{{recipe.strMealThumb}}" alt="{{recipe.strMeal}}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{recipe.strMeal}}</h5>
+                            <p class="card-text">Category: {{recipe.strCategory || 'N/A'}}</p>
+                            <button class="btn btn-sm btn-primary" ng-click="viewRecipe(recipe.idMeal)">View Recipe</button>
+                            <button class="btn btn-sm btn-success" ng-click="saveRecipe(recipe)">Save Recipe</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recipe Details Section -->
+    <div class="recipe-details" ng-if="selectedRecipe">
+        <div class="container">
+            <button class="btn btn-secondary mb-3" ng-click="goBack()">Back to Results</button>
+            <h2>{{selectedRecipe.strMeal}}</h2>
+            <img ng-src="{{selectedRecipe.strMealThumb}}" alt="{{selectedRecipe.strMeal}}">
+            <p><strong>Category:</strong> {{selectedRecipe.strCategory}}</p>
+            <p><strong>Area:</strong> {{selectedRecipe.strArea}}</p>
+            <p><strong>Instructions:</strong></p>
+            <p>{{selectedRecipe.strInstructions}}</p>
+            <h4>Ingredients:</h4>
+            <ul>
+                <li ng-repeat="ingredient in ingredients">{{ingredient}}</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer class="footer bg-dark text-white py-3">
+        <div class="container text-center">
+            <p>&copy; 2025 RecipeBook. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="app/js/app.module.js"></script>
+    <script src="app/js/app.controller.js"></script>
+    <script src="app/js/app.service.js"></script>
 </body>
 </html>
