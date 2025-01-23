@@ -32,5 +32,34 @@ angular.module('RecipeBookApp')
                 });
             }
         };
+          // Filter recipes by selected area
+          $scope.filterRecipes = function() {
+            if ($scope.selectedArea) {
+                $scope.recipes = $scope.originalRecipes.filter(recipe => recipe.strArea === $scope.selectedArea);
+            } else {
+                $scope.recipes = [...$scope.originalRecipes];
+            }
+        };
+        
+        // View recipe details
+        $scope.viewRecipe = function(recipeId) {
+            RecipeService.getRecipeDetails(recipeId).then(function(response) {
+                $scope.selectedRecipe = response.data.meals[0];
+                $scope.ingredients = [];
+                for (let i = 1; i <= 20; i++) {
+                    let ingredient = $scope.selectedRecipe[`strIngredient${i}`];
+                    let measure = $scope.selectedRecipe[`strMeasure${i}`];
+                    if (ingredient && ingredient.trim()) {
+                        $scope.ingredients.push(`${ingredient} - ${measure}`);
+                    }
+                }
+            });
+        };
+
+        // Go back to results
+        $scope.goBack = function() {
+            $scope.selectedRecipe = null;
+        };
+
 
     }]);
